@@ -85,38 +85,33 @@ func main() {
 	g := DirectedGraph{}
 	g.PopulateFromFile("./_410e934e6553ac56409b2cb7096a44aa_SCC.txt", false)
 
-	conditionCounter := 0
-
-	for nodeIdx, edges := range g.edges {
-		if edges.tail == 0 && conditionCounter == 0 {
-			fmt.Println(fmt.Sprintf("For graph g, at nodeIdx = %d, there exists node = %d", nodeIdx, edges.tail))
-			conditionCounter++
-		}
-
-		if edges.tail == 16129 && conditionCounter == 1 {
-			fmt.Println(fmt.Sprintf("For graph g, at nodeIdx = %d, there exists node = %d", nodeIdx, edges.tail))
-			conditionCounter++
-		}
-	}
-
 	g_reversed := DirectedGraph{}
 	g_reversed.PopulateFromFile("./_410e934e6553ac56409b2cb7096a44aa_SCC.txt", true)
 
-	for nodeIdx, edges := range g.edges {
-		if edges.tail == 0 && conditionCounter == 2 {
-			fmt.Println(fmt.Sprintf("For graph g, at nodeIdx = %d, there exists node = %d", nodeIdx, edges.tail))
-			conditionCounter++
+	for nodeIdx := 0; nodeIdx < len(g.edges); nodeIdx++ {
+		if g.edges[nodeIdx].heads == nil {
+			fmt.Println(fmt.Sprintf("For graph g, at nodeIdx=%d, no node was discovered", nodeIdx))
+			continue
 		}
 
-		if edges.tail == 16129 && conditionCounter == 3 {
-			fmt.Println(fmt.Sprintf("For graph g, at nodeIdx = %d, there exists node = %d", nodeIdx, edges.tail))
-			conditionCounter++
+		edge := g.edges[nodeIdx]
+		if edge.tail != nodeIdx+1 {
+			fmt.Println(fmt.Sprintf("For graph g, at nodeIdx=%d, there exists node = %d", nodeIdx, edge.tail))
 		}
 	}
 
-	for nodeIdx := range []int{0, 10, 100, 1000,} {
-		edge := g.edges[nodeIdx]
-		fmt.Println(fmt.Sprintf("For graph g, at nodeIdx = %d, there exists node = %d", nodeIdx, edge.tail))
+	for nodeIdx := 0; nodeIdx < len(g_reversed.edges); nodeIdx++ {
+		if g_reversed.edges[nodeIdx].heads == nil {
+			fmt.Println(fmt.Sprintf("For graph g_reversed, at nodeIdx=%d, no node was discovered", nodeIdx))
+			continue
+		}
+
+		edge := g_reversed.edges[nodeIdx]
+		if edge.tail != nodeIdx+1 {
+			fmt.Println(
+				fmt.Sprintf(
+					"For graph g_reversed, at nodeIdx=%d, there exists node = %d", nodeIdx, edge.tail))
+		}
 	}
 
 	fmt.Println("Hell on earth")
