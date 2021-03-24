@@ -81,6 +81,22 @@ func (g *DirectedGraph) AddDirectedEdge(tail int, head int) {
 	g.edges[tailNodeIdx].heads[headLen] = head
 }
 
+func (g *DirectedGraph) checkGraph(grName string) {
+	for nodeIdx := 0; nodeIdx < len(g.edges); nodeIdx++ {
+		if g.edges[nodeIdx].heads == nil {
+			fmt.Println(fmt.Sprintf("For graph %s, at nodeIdx=%d, no node was discovered", grName, nodeIdx))
+			continue
+		}
+
+		edge := g.edges[nodeIdx]
+		if edge.tail != nodeIdx+1 {
+			fmt.Println(
+				fmt.Sprintf(
+					"For graph %s, at nodeIdx=%d, there exists node = %d", grName, nodeIdx, edge.tail))
+		}
+	}
+}
+
 func main() {
 	g := DirectedGraph{}
 	g.PopulateFromFile("./_410e934e6553ac56409b2cb7096a44aa_SCC.txt", false)
@@ -88,31 +104,8 @@ func main() {
 	g_reversed := DirectedGraph{}
 	g_reversed.PopulateFromFile("./_410e934e6553ac56409b2cb7096a44aa_SCC.txt", true)
 
-	for nodeIdx := 0; nodeIdx < len(g.edges); nodeIdx++ {
-		if g.edges[nodeIdx].heads == nil {
-			fmt.Println(fmt.Sprintf("For graph g, at nodeIdx=%d, no node was discovered", nodeIdx))
-			continue
-		}
-
-		edge := g.edges[nodeIdx]
-		if edge.tail != nodeIdx+1 {
-			fmt.Println(fmt.Sprintf("For graph g, at nodeIdx=%d, there exists node = %d", nodeIdx, edge.tail))
-		}
-	}
-
-	for nodeIdx := 0; nodeIdx < len(g_reversed.edges); nodeIdx++ {
-		if g_reversed.edges[nodeIdx].heads == nil {
-			fmt.Println(fmt.Sprintf("For graph g_reversed, at nodeIdx=%d, no node was discovered", nodeIdx))
-			continue
-		}
-
-		edge := g_reversed.edges[nodeIdx]
-		if edge.tail != nodeIdx+1 {
-			fmt.Println(
-				fmt.Sprintf(
-					"For graph g_reversed, at nodeIdx=%d, there exists node = %d", nodeIdx, edge.tail))
-		}
-	}
+	//g.checkGraph("g")
+	//g_reversed.checkGraph("g_reversed")
 
 	fmt.Println("Hell on earth")
 }
