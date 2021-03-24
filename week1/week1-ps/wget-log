@@ -1,0 +1,6 @@
+--2021-03-21 20:30:53--  https://d3c33hcgiwev3.cloudfront.net/_410e934e6553ac56409b2cb7096a44aa_SCC.txt?Expires=1616457600
+Resolving d3c33hcgiwev3.cloudfront.net (d3c33hcgiwev3.cloudfront.net)... 52.85.56.7, 52.85.56.51, 52.85.56.152, ...
+Connecting to d3c33hcgiwev3.cloudfront.net (d3c33hcgiwev3.cloudfront.net)|52.85.56.7|:443... connected.
+HTTP request sent, awaiting response... 403 Forbidden
+2021-03-21 20:30:54 ERROR 403: Forbidden.
+
