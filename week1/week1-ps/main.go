@@ -108,14 +108,14 @@ func (g *DirectedGraph) checkGraph(grName string) {
 }
 
 func (searcher *FirstDepthSearcher) startSearch(nodeTail int) {
-	fmt.Println("startSearch: Called")
+	//fmt.Println("startSearch: Called")
 	nodeIdx := nodeTail - 1
 
 	if searcher.isNodeExplored[nodeIdx] {
-		fmt.Println("startSearch: Node", nodeTail, "has been explored. Ignored")
+		//fmt.Println("startSearch: Node", nodeTail, "has been explored. Ignored")
 		return
 	}
-	fmt.Println("startSearch: Setting nodeTail", nodeTail, "to explored")
+	//fmt.Println("startSearch: Setting nodeTail", nodeTail, "to explored")
 	searcher.isNodeExplored[nodeIdx] = true
 
 	if searcher.g.edges[nodeIdx].heads != nil {
@@ -127,7 +127,7 @@ func (searcher *FirstDepthSearcher) startSearch(nodeTail int) {
 	searcher.nodesFinishedQueue = append(searcher.nodesFinishedQueue, nodeTail)
 	searcher.nodesFinishingTime[nodeTail-1] = searcher.counterFinishingTime
 	searcher.counterFinishingTime++
-	fmt.Println("startSearch: Node", nodeTail, "is fully explored.")
+	//fmt.Println("startSearch: Node", nodeTail, "is fully explored.")
 }
 
 func main() {
