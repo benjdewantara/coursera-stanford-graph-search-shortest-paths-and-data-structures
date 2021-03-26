@@ -38,7 +38,8 @@ func (g *DirectedGraph) AddDirectedEdge(tail int, head int) {
 		initialLen := 8
 		if initialLen < tail {
 			initialLen = tail
-		} else if initialLen < head {
+		}
+		if tail < head {
 			initialLen = head
 		}
 		g.edges = make([]DirectedEdge, initialLen)
@@ -46,10 +47,12 @@ func (g *DirectedGraph) AddDirectedEdge(tail int, head int) {
 
 	// if newLen is required
 	newLen := 0
-	if len(g.edges) < int(tail) {
-		newLen = tail
-	} else if len(g.edges) < int(head) {
-		newLen = head
+	maxOutOfTailHead := tail
+	if tail < head {
+		maxOutOfTailHead = head
+	}
+	if len(g.edges) < maxOutOfTailHead {
+		newLen = maxOutOfTailHead
 	}
 
 	// grow the capacity of g.edges
@@ -65,20 +68,10 @@ func (g *DirectedGraph) AddDirectedEdge(tail int, head int) {
 
 	tailNodeIdx := tail - 1
 	g.edges[tailNodeIdx].tail = tail
-	if g.edges[tailNodeIdx].heads == nil {
-		g.edges[tailNodeIdx].heads = make([]int, 0, 8)
-	}
+	g.edges[tailNodeIdx].heads = append(g.edges[tailNodeIdx].heads, head)
 
-	// grow the capacity of array of head nodes pointed to by tail node
-	headLen := len(g.edges[tailNodeIdx].heads)
-	if cap(g.edges[tailNodeIdx].heads) <= headLen {
-		newHeadNodes := make([]int, headLen, int(headLen*5/4))
-		copy(newHeadNodes, g.edges[tailNodeIdx].heads)
-		g.edges[tailNodeIdx].heads = newHeadNodes
-	}
-
-	g.edges[tailNodeIdx].heads = g.edges[tailNodeIdx].heads[0 : headLen+1]
-	g.edges[tailNodeIdx].heads[headLen] = head
+	headNodeIdx := head - 1
+	g.edges[headNodeIdx].tail = head
 }
 
 func (g *DirectedGraph) checkGraph(grName string) {
@@ -93,6 +86,12 @@ func (g *DirectedGraph) checkGraph(grName string) {
 			fmt.Println(
 				fmt.Sprintf(
 					"For graph %s, at nodeIdx=%d, there exists node = %d", grName, nodeIdx, edge.tail))
+		}
+
+		if edge.tail == 0 {
+			fmt.Println(
+				fmt.Sprintf(
+					"For graph %s, at nodeIdx=%d, the tail is zero", grName, nodeIdx, edge.tail))
 		}
 	}
 }
