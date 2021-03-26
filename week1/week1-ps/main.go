@@ -101,11 +101,11 @@ func main() {
 	g := DirectedGraph{}
 	g.PopulateFromFile("./_410e934e6553ac56409b2cb7096a44aa_SCC.txt", false)
 
-	g_reversed := DirectedGraph{}
-	g_reversed.PopulateFromFile("./_410e934e6553ac56409b2cb7096a44aa_SCC.txt", true)
+	gReversed := DirectedGraph{}
+	gReversed.PopulateFromFile("./_410e934e6553ac56409b2cb7096a44aa_SCC.txt", true)
 
-	//g.checkGraph("g")
-	//g_reversed.checkGraph("g_reversed")
+	g.checkGraph("g")
+	gReversed.checkGraph("gReversed")
 
 	fmt.Println("Hell on earth")
 }
