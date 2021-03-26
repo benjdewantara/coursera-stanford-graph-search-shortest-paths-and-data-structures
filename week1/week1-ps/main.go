@@ -118,8 +118,10 @@ func (searcher *FirstDepthSearcher) startSearch(nodeTail int) {
 	fmt.Println("startSearch: Setting nodeTail", nodeTail, "to explored")
 	searcher.isNodeExplored[nodeIdx] = true
 
-	for _, nodeHead := range searcher.g.edges[nodeIdx].heads {
-		searcher.startSearch(nodeHead)
+	if searcher.g.edges[nodeIdx].heads != nil {
+		for _, nodeHead := range searcher.g.edges[nodeIdx].heads {
+			searcher.startSearch(nodeHead)
+		}
 	}
 
 	searcher.nodesFinishedQueue = append(searcher.nodesFinishedQueue, nodeTail)
