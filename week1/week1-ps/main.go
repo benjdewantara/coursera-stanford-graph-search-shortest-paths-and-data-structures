@@ -16,6 +16,17 @@ type DirectedGraph struct {
 	edges []DirectedEdge
 }
 
+type FirstDepthSearcher struct {
+	g                    DirectedGraph
+	counterFinishingTime int
+	isNodeExplored       []bool
+	nodesFinishingTime   []int
+	nodesFinishedQueue   []int
+	//finishingTimeIndx    int
+	//nodesLeader          []int
+	//nodeStart            int
+}
+
 func (g *DirectedGraph) PopulateFromFile(filepath string, isHeadTailReversed bool) {
 	contentBytes, _ := ioutil.ReadFile(filepath)
 	for _, edgeStr := range strings.Split(string(contentBytes), "\n") {
@@ -96,15 +107,56 @@ func (g *DirectedGraph) checkGraph(grName string) {
 	}
 }
 
+func (searcher *FirstDepthSearcher) startSearch(nodeTail int) {
+	fmt.Println("startSearch: Called")
+	nodeIdx := nodeTail - 1
+
+	if searcher.isNodeExplored[nodeIdx] {
+		fmt.Println("startSearch: Node", nodeTail, "has been explored. Ignored")
+		return
+	}
+	fmt.Println("startSearch: Setting nodeTail", nodeTail, "to explored")
+	searcher.isNodeExplored[nodeIdx] = true
+
+	for _, nodeHead := range searcher.g.edges[nodeIdx].heads {
+		searcher.startSearch(nodeHead)
+	}
+
+	searcher.nodesFinishedQueue = append(searcher.nodesFinishedQueue, nodeTail)
+	searcher.nodesFinishingTime[nodeTail-1] = searcher.counterFinishingTime
+	searcher.counterFinishingTime++
+	fmt.Println("startSearch: Node", nodeTail, "is fully explored.")
+}
+
 func main() {
+	/*	g := DirectedGraph{}
+		g.PopulateFromFile("./_410e934e6553ac56409b2cb7096a44aa_SCC.txt", false)
+
+		gReversed := DirectedGraph{}
+		gReversed.PopulateFromFile("./_410e934e6553ac56409b2cb7096a44aa_SCC.txt", true)
+	*/
 	g := DirectedGraph{}
-	g.PopulateFromFile("./_410e934e6553ac56409b2cb7096a44aa_SCC.txt", false)
+	g.PopulateFromFile("./edges_example_reversed.txt", true)
 
 	gReversed := DirectedGraph{}
-	gReversed.PopulateFromFile("./_410e934e6553ac56409b2cb7096a44aa_SCC.txt", true)
+	gReversed.PopulateFromFile("./edges_example_reversed.txt", false)
 
-	g.checkGraph("g")
-	gReversed.checkGraph("gReversed")
+	//g.checkGraph("g")
+	//gReversed.checkGraph("gReversed")
+
+	firstPassSearcher := FirstDepthSearcher{
+		g:                    gReversed,
+		counterFinishingTime: 1,
+		isNodeExplored:       make([]bool, len(g.edges), len(g.edges)),
+		nodesFinishingTime:   make([]int, len(g.edges), len(g.edges)),
+		nodesFinishedQueue:   nil,
+		//nodesLeader:          nil,
+		//nodeStart:            0,
+	}
+
+	for nodeTail := len(gReversed.edges) - 1; 0 < nodeTail; nodeTail-- {
+		firstPassSearcher.startSearch(nodeTail)
+	}
 
 	fmt.Println("Hell on earth")
 }
