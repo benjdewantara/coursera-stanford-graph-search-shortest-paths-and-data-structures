@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -131,17 +132,17 @@ func (searcher *FirstDepthSearcher) startSearch(nodeTail int) {
 }
 
 func main() {
-	/*	g := DirectedGraph{}
-		g.PopulateFromFile("./_410e934e6553ac56409b2cb7096a44aa_SCC.txt", false)
-
-		gReversed := DirectedGraph{}
-		gReversed.PopulateFromFile("./_410e934e6553ac56409b2cb7096a44aa_SCC.txt", true)
-	*/
 	g := DirectedGraph{}
-	g.PopulateFromFile("./edges_example_reversed.txt", true)
+	g.PopulateFromFile("./_410e934e6553ac56409b2cb7096a44aa_SCC.txt", false)
 
 	gReversed := DirectedGraph{}
-	gReversed.PopulateFromFile("./edges_example_reversed.txt", false)
+	gReversed.PopulateFromFile("./_410e934e6553ac56409b2cb7096a44aa_SCC.txt", true)
+
+	//g := DirectedGraph{}
+	//g.PopulateFromFile("./edges_example_reversed.txt", true)
+	//
+	//gReversed := DirectedGraph{}
+	//gReversed.PopulateFromFile("./edges_example_reversed.txt", false)
 
 	//g.checkGraph("g")
 	//gReversed.checkGraph("gReversed")
@@ -159,6 +160,54 @@ func main() {
 	for nodeTail := len(gReversed.edges) - 1; 0 < nodeTail; nodeTail-- {
 		firstPassSearcher.startSearch(nodeTail)
 	}
+
+	secondPassSearcher := FirstDepthSearcher{
+		g:                    g,
+		counterFinishingTime: 1,
+		isNodeExplored:       make([]bool, len(g.edges), len(g.edges)),
+		nodesFinishingTime:   make([]int, len(g.edges), len(g.edges)),
+		nodesFinishedQueue:   nil,
+		//nodesLeader:          nil,
+		//nodeStart:            0,
+	}
+
+	fiveLargestScc := make([]int, 0, 5)
+	beforeSearchLen := 0
+	afterSearchLen := 0
+	for nodeFinishedQueueIdx := len(firstPassSearcher.nodesFinishedQueue) - 1; nodeFinishedQueueIdx >= 0; nodeFinishedQueueIdx-- {
+		nodeTail := firstPassSearcher.nodesFinishedQueue[nodeFinishedQueueIdx]
+
+		secondPassSearcher.startSearch(nodeTail)
+		afterSearchLen = len(secondPassSearcher.nodesFinishedQueue)
+
+		finishedNodesLength := afterSearchLen - beforeSearchLen
+
+		isStoringFirstFive := len(fiveLargestScc) < 5
+		isGreater := false
+		if !isStoringFirstFive {
+			for _, l := range fiveLargestScc {
+				isGreater = finishedNodesLength > l
+				if isGreater {
+					break
+				}
+			}
+		}
+
+		if isStoringFirstFive {
+			fiveLargestScc = append(fiveLargestScc, finishedNodesLength)
+			sort.Sort(sort.Reverse(sort.IntSlice(fiveLargestScc)))
+		} else if isGreater {
+			fiveLargestScc = append(
+				[]int{finishedNodesLength},
+				fiveLargestScc[0:4]...,
+			)
+
+			sort.Sort(sort.Reverse(sort.IntSlice(fiveLargestScc)))
+		}
+		beforeSearchLen = afterSearchLen
+	}
+
+	fmt.Println("main: fiveLargestScc = ", fiveLargestScc)
 
 	fmt.Println("Hell on earth")
 }
