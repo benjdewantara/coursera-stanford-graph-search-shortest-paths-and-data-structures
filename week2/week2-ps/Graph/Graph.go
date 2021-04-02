@@ -7,9 +7,9 @@ import (
 )
 
 type WeightedEdge struct {
-	tail   int
-	heads  []int
-	weight []int
+	Tail    int
+	Heads   []int
+	Weights []int
 }
 
 type Graph struct {
@@ -23,7 +23,7 @@ func (g *Graph) PopulateFromFile(filepath string) {
 		edgeStrSplit := strings.Split(edgeStr, "\t")
 		tail, _ := strconv.Atoi(edgeStrSplit[0])
 		e := WeightedEdge{
-			tail: tail,
+			Tail: tail,
 		}
 		for _, headWeightStr := range edgeStrSplit[1:] {
 			headWeightStrSplit := strings.Split(headWeightStr, ",")
@@ -32,8 +32,8 @@ func (g *Graph) PopulateFromFile(filepath string) {
 			}
 			head, _ := strconv.Atoi(headWeightStrSplit[0])
 			weight, _ := strconv.Atoi(headWeightStrSplit[1])
-			e.heads = append(e.heads, head)
-			e.weight = append(e.weight, weight)
+			e.Heads = append(e.Heads, head)
+			e.Weights = append(e.Weights, weight)
 		}
 
 		g.Edges = append(g.Edges, e)
