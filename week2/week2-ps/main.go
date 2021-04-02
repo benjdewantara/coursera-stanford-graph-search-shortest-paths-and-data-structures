@@ -51,15 +51,40 @@ func main() {
 	//g.populateFromFile("_dcf1d02570e57d23ab526b1e33ba6f12_dijkstraData.txt")
 	//g.edges = g.edges[0:200]
 
-	h := Heap.MinHeap{
-		Indices: make([]int, 5),
-		Values:  make([]int, 5),
+	MAX_LENGTH := 5
+	num := 5
+
+	h := Heap.MinHeap{}
+
+	for i := 0; i < MAX_LENGTH; i++ {
+		h.Indices = append(h.Indices, i)
+		//h.Indices[i] = i
+
+		h.Values = append(h.Values, num)
+		//h.Values[i] = num
+
+		num--
 	}
 
-	for i := 0; i < len(h.Indices); i++ {
-		h.Indices[i] = i
-		h.Values[i] = i
-	}
+	//order0 := 1<<0
+	//fmt.Println(order0)
+	//
+	//order1 := 1<<1
+	//fmt.Println(order1)
+	//
+	//order2 := 1<<2
+	//fmt.Println(order2)
 
+	//return
+
+	h.Heapify()
+
+	rootIndex, rootValue := h.ExtractRoot()
+	rootIndex, rootValue = h.ExtractRoot()
+	rootIndex, rootValue = h.ExtractRoot()
+	rootIndex, rootValue = h.ExtractRoot()
+	rootIndex, rootValue = h.ExtractRoot()
+
+	fmt.Println(fmt.Sprintf("rootIndex=%d, rootValue=%d", rootIndex, rootValue))
 	fmt.Println("Hell on earth")
 }
