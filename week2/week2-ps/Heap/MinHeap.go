@@ -57,14 +57,7 @@ func (h *MinHeap) swapWithParent(indx int) {
 	childValue := h.Values[childIndx]
 
 	if childValue < parentValue {
-		parentValueBefore := h.Values[parentIndx]
-		parentIndexBefore := h.Indices[parentIndx]
-
-		h.Values[parentIndx] = h.Values[childIndx]
-		h.Indices[parentIndx] = h.Indices[childIndx]
-
-		h.Values[childIndx] = parentValueBefore
-		h.Indices[childIndx] = parentIndexBefore
+		h.swap(parentIndx, childIndx)
 	}
 
 	h.swapWithParent(parentIndx)
@@ -85,15 +78,7 @@ func (h *MinHeap) swapWithChild(indx int) {
 	childValue := h.Values[childIndx]
 
 	if childValue < parentValue {
-		parentValueBefore := h.Values[parentIndx]
-		parentIndexBefore := h.Indices[parentIndx]
-
-		h.Values[parentIndx] = h.Values[childIndx]
-		h.Indices[parentIndx] = h.Indices[childIndx]
-
-		h.Values[childIndx] = parentValueBefore
-		h.Indices[childIndx] = parentIndexBefore
-
+		h.swap(parentIndx, childIndx)
 		h.swapWithChild(childIndx)
 	}
 
@@ -108,8 +93,11 @@ func (h *MinHeap) swapWithChild(indx int) {
 	childValue = h.Values[childIndx]
 
 	if childValue < parentValue {
-		parentValueBefore := h.Values[parentIndx]
-		parentIndexBefore := h.Indices[parentIndx]
+		h.swap(parentIndx, childIndx)
+		h.swapWithChild(childIndx)
+		return
+	}
+}
 
 func (h *MinHeap) swap(fromIndx int, toIndx int) {
 	valueBefore := h.Values[fromIndx]
