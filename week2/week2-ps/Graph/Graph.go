@@ -16,6 +16,10 @@ type Graph struct {
 	Edges []WeightedEdge
 }
 
+func (g *Graph) GetEdgeAt(node int) *WeightedEdge {
+	return &g.Edges[node-1]
+}
+
 func (g *Graph) PopulateFromFile(filepath string) {
 	contentBytes, _ := ioutil.ReadFile(filepath)
 	for _, edgeStr := range strings.Split(string(contentBytes), "\n") {
