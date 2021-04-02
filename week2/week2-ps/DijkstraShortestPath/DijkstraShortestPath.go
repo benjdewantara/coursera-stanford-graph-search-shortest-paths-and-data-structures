@@ -22,4 +22,34 @@ func (d *DijkstraShortestPath) InitWithRoot(initialRootIndex int) {
 	d.MinHeapOfVerticesAdjacent.Heapify()
 }
 
+func (d *DijkstraShortestPath) CongregateOnce() {
+	node, weight := d.MinHeapOfVerticesAdjacent.ExtractRoot()
+
+	d.VerticesCongregated = append(d.VerticesCongregated, node)
+	d.WeightsCongregated = append(d.WeightsCongregated, weight)
+
+	edge := d.Graph.GetEdgeAt(node)
+	heads := edge.Heads
+
+	for headNodeIndx, headNode := range heads {
+		if indexInIntegerArray(d.VerticesCongregated, headNode) >= 0 {
+			continue
+		}
+
+		edge.Weights[headNodeIndx] += weight
+
+		nextNode := edge.Heads[headNodeIndx]
+		nextWeight := edge.Weights[headNodeIndx]
+		d.MinHeapOfVerticesAdjacent.Insert(nextNode, nextWeight)
+	}
+}
+
+func indexInIntegerArray(arr []int, elem int) int {
+	for i := 0; i < len(arr); i++ {
+		if arr[i] == elem {
+			return i
+		}
+	}
+
+	return -1
 }

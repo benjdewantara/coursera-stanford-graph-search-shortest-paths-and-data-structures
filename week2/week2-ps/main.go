@@ -16,6 +16,8 @@ func main() {
 	}
 
 	d.InitWithRoot(0)
+	d.CongregateOnce()
+
 
 	fmt.Println("Hell on earth")
 }
