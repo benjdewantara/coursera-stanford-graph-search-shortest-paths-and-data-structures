@@ -111,13 +111,13 @@ func (h *MinHeap) swapWithChild(indx int) {
 		parentValueBefore := h.Values[parentIndx]
 		parentIndexBefore := h.Indices[parentIndx]
 
-		h.Values[parentIndx] = h.Values[childIndx]
-		h.Indices[parentIndx] = h.Indices[childIndx]
+func (h *MinHeap) swap(fromIndx int, toIndx int) {
+	valueBefore := h.Values[fromIndx]
+	indexBefore := h.Indices[fromIndx]
 
-		h.Values[childIndx] = parentValueBefore
-		h.Indices[childIndx] = parentIndexBefore
+	h.Values[fromIndx] = h.Values[toIndx]
+	h.Indices[fromIndx] = h.Indices[toIndx]
 
-		h.swapWithChild(childIndx)
-		return
-	}
+	h.Values[toIndx] = valueBefore
+	h.Indices[toIndx] = indexBefore
 }
