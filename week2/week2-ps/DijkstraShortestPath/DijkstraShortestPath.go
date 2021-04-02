@@ -1,7 +1,10 @@
 package DijkstraShortestPath
 
-import "../Graph"
-import "../Heap"
+import (
+	"../Utility"
+	"../Graph"
+	"../Heap"
+)
 
 type DijkstraShortestPath struct {
 	Graph                     Graph.Graph
@@ -32,7 +35,7 @@ func (d *DijkstraShortestPath) CongregateOnce() {
 	heads := edge.Heads
 
 	for headNodeIndx, headNode := range heads {
-		if indexInIntegerArray(d.VerticesCongregated, headNode) >= 0 {
+		if Utility.IntArr(d.VerticesCongregated).IndexOf(headNode) >= 0 {
 			continue
 		}
 
@@ -40,16 +43,10 @@ func (d *DijkstraShortestPath) CongregateOnce() {
 
 		nextNode := edge.Heads[headNodeIndx]
 		nextWeight := edge.Weights[headNodeIndx]
-		d.MinHeapOfVerticesAdjacent.Insert(nextNode, nextWeight)
+		d.MinHeapOfVerticesAdjacent.UpdateIfLesser(nextNode, nextWeight)
 	}
 }
 
-func indexInIntegerArray(arr []int, elem int) int {
-	for i := 0; i < len(arr); i++ {
-		if arr[i] == elem {
-			return i
-		}
-	}
-
-	return -1
+func (d *DijkstraShortestPath) HasAdjacentVertices() bool {
+	return len(d.MinHeapOfVerticesAdjacent.Values) > 0
 }
