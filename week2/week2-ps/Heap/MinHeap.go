@@ -55,7 +55,7 @@ func (h *MinHeap) UpdateIfLesser(index int, value int) {
 	}
 
 	existingValue := h.Values[existingAtIndx]
-	if existingValue < value {
+	if value < existingValue {
 		h.Values[existingAtIndx] = value
 	}
 }
