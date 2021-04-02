@@ -1,9 +1,9 @@
 package DijkstraShortestPath
 
 import (
-	"../Utility"
 	"../Graph"
 	"../Heap"
+	"../Utility"
 )
 
 type DijkstraShortestPath struct {
@@ -32,9 +32,8 @@ func (d *DijkstraShortestPath) CongregateOnce() {
 	d.WeightsCongregated = append(d.WeightsCongregated, weight)
 
 	edge := d.Graph.GetEdgeAt(node)
-	heads := edge.Heads
 
-	for headNodeIndx, headNode := range heads {
+	for headNodeIndx, headNode := range edge.Heads {
 		if Utility.IntArr(d.VerticesCongregated).IndexOf(headNode) >= 0 {
 			continue
 		}
