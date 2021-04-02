@@ -3,7 +3,9 @@ package main
 import (
 	"./DijkstraShortestPath"
 	"./Graph"
+	"./Utility"
 	"fmt"
+	"strings"
 )
 
 func main() {
@@ -16,8 +18,22 @@ func main() {
 	}
 
 	d.InitWithRoot(0)
-	d.CongregateOnce()
 
+	for d.HasAdjacentVertices() {
+		d.CongregateOnce()
+	}
 
-	fmt.Println("Hell on earth")
+	resultOneline := ""
+
+	verticesOfInterest := []int{7, 37, 59, 82, 99, 115, 133, 165, 188, 197}
+	for _, vert := range verticesOfInterest {
+		indx := Utility.IntArr(d.VerticesCongregated).IndexOf(vert)
+
+		resultOneline = fmt.Sprintf("%s,%d", resultOneline, d.WeightsCongregated[indx])
+		fmt.Println(fmt.Sprintf("node=%d distance=%d", d.VerticesCongregated[indx], d.WeightsCongregated[indx]))
+	}
+
+	resultOneline = strings.TrimPrefix(resultOneline, ",")
+
+	fmt.Println(resultOneline)
 }

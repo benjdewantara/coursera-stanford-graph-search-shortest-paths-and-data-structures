@@ -1,5 +1,9 @@
 package Heap
 
+import (
+	"../Utility"
+)
+
 type MinHeap struct {
 	Indices []int
 	Values  []int
@@ -41,6 +45,29 @@ func (h *MinHeap) Insert(index int, value int) {
 	h.Values = append(h.Values, value)
 	h.Indices = append(h.Indices, index)
 	h.swapWithParent(len(h.Values) - 1)
+}
+
+func (h *MinHeap) UpdateIfLesser(index int, value int) {
+	existingAtIndx := Utility.IntArr(h.Indices).IndexOf(index)
+	if existingAtIndx < 0 {
+		h.Insert(index, value)
+		return
+	}
+
+	existingValue := h.Values[existingAtIndx]
+	if existingValue < value {
+		h.Values[existingAtIndx] = value
+	}
+}
+
+func (h *MinHeap) Delete(indx int) {
+	bottomMostIndex := len(h.Values) - 1
+
+	h.swap(indx, bottomMostIndex)
+	h.Values = h.Values[0:bottomMostIndex]
+	h.Indices = h.Indices[0:bottomMostIndex]
+
+	h.swapWithChild(indx)
 }
 
 func (h *MinHeap) swapWithParent(indx int) {
