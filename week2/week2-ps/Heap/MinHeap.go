@@ -37,6 +37,12 @@ func (h *MinHeap) ExtractRoot() (int, int) {
 	return rootIndex, rootValue
 }
 
+func (h *MinHeap) Insert(index int, value int) {
+	h.Values = append(h.Values, value)
+	h.Indices = append(h.Indices, index)
+	h.swapWithParent(len(h.Values) - 1)
+}
+
 func (h *MinHeap) swapWithParent(indx int) {
 	zeroBasedIndex := ZeroBasedIndex{zeroBasedIndex: indx}
 

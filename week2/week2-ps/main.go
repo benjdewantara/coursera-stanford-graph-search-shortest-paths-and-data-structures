@@ -82,6 +82,9 @@ func main() {
 	rootIndex, rootValue := h.ExtractRoot()
 	rootIndex, rootValue = h.ExtractRoot()
 	rootIndex, rootValue = h.ExtractRoot()
+
+	h.Insert(8, 1)
+
 	rootIndex, rootValue = h.ExtractRoot()
 	rootIndex, rootValue = h.ExtractRoot()
 
