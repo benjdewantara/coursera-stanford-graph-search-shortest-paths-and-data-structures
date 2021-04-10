@@ -4,12 +4,13 @@ import (
 	"../Utility"
 )
 
-type MinHeap struct {
-	Indices []int
-	Values  []int
+type Heap struct {
+	IsMinHeap bool
+	Indices   []int
+	Values    []int
 }
 
-func (h *MinHeap) Heapify() {
+func (h *Heap) Heapify() {
 	var leftmostBoundary int
 	for boundaryOrder := 0; boundaryOrder >= 0; boundaryOrder++ {
 		leftmostBoundary = 1 << boundaryOrder
@@ -24,7 +25,7 @@ func (h *MinHeap) Heapify() {
 	}
 }
 
-func (h *MinHeap) ExtractRoot() (int, int) {
+func (h *Heap) ExtractRoot() (int, int) {
 	lastIndx := len(h.Values) - 1
 
 	rootIndex := h.Indices[0]
@@ -41,13 +42,13 @@ func (h *MinHeap) ExtractRoot() (int, int) {
 	return rootIndex, rootValue
 }
 
-func (h *MinHeap) Insert(index int, value int) {
+func (h *Heap) Insert(index int, value int) {
 	h.Values = append(h.Values, value)
 	h.Indices = append(h.Indices, index)
 	h.swapWithParent(len(h.Values) - 1)
 }
 
-func (h *MinHeap) UpdateIfLesser(index int, value int) {
+func (h *Heap) UpdateIfLesser(index int, value int) {
 	existingAtIndx := Utility.IntArr(h.Indices).IndexOf(index)
 	if existingAtIndx < 0 {
 		h.Insert(index, value)
@@ -55,12 +56,15 @@ func (h *MinHeap) UpdateIfLesser(index int, value int) {
 	}
 
 	existingValue := h.Values[existingAtIndx]
-	if value < existingValue {
+	isMaxHeap := !h.IsMinHeap
+	if h.IsMinHeap && value < existingValue {
+		h.Values[existingAtIndx] = value
+	} else if isMaxHeap && value > existingValue {
 		h.Values[existingAtIndx] = value
 	}
 }
 
-func (h *MinHeap) Delete(indx int) {
+func (h *Heap) Delete(indx int) {
 	bottomMostIndex := len(h.Values) - 1
 
 	h.swap(indx, bottomMostIndex)
@@ -70,7 +74,7 @@ func (h *MinHeap) Delete(indx int) {
 	h.swapWithChild(indx)
 }
 
-func (h *MinHeap) swapWithParent(indx int) {
+func (h *Heap) swapWithParent(indx int) {
 	zeroBasedIndex := ZeroBasedIndex{zeroBasedIndex: indx}
 
 	parentIndx := zeroBasedIndex.GetParentIndex()
@@ -83,14 +87,17 @@ func (h *MinHeap) swapWithParent(indx int) {
 	parentValue := h.Values[parentIndx]
 	childValue := h.Values[childIndx]
 
-	if childValue < parentValue {
+	isMaxHeap := !h.IsMinHeap
+	if h.IsMinHeap && childValue < parentValue {
+		h.swap(parentIndx, childIndx)
+	} else if isMaxHeap && childValue > parentValue {
 		h.swap(parentIndx, childIndx)
 	}
 
 	h.swapWithParent(parentIndx)
 }
 
-func (h *MinHeap) swapWithChild(indx int) {
+func (h *Heap) swapWithChild(indx int) {
 	zeroBasedIndex := ZeroBasedIndex{zeroBasedIndex: indx}
 	parentIndx := indx
 
@@ -104,7 +111,11 @@ func (h *MinHeap) swapWithChild(indx int) {
 	parentValue := h.Values[parentIndx]
 	childValue := h.Values[childIndx]
 
-	if childValue < parentValue {
+	isMaxHeap := !h.IsMinHeap
+	if h.IsMinHeap && childValue < parentValue {
+		h.swap(parentIndx, childIndx)
+		h.swapWithChild(childIndx)
+	} else if isMaxHeap && childValue > parentValue {
 		h.swap(parentIndx, childIndx)
 		h.swapWithChild(childIndx)
 	}
@@ -119,14 +130,18 @@ func (h *MinHeap) swapWithChild(indx int) {
 	parentValue = h.Values[parentIndx]
 	childValue = h.Values[childIndx]
 
-	if childValue < parentValue {
+	if h.IsMinHeap && childValue < parentValue {
+		h.swap(parentIndx, childIndx)
+		h.swapWithChild(childIndx)
+		return
+	} else if isMaxHeap && childValue > parentValue {
 		h.swap(parentIndx, childIndx)
 		h.swapWithChild(childIndx)
 		return
 	}
 }
 
-func (h *MinHeap) swap(fromIndx int, toIndx int) {
+func (h *Heap) swap(fromIndx int, toIndx int) {
 	valueBefore := h.Values[fromIndx]
 	indexBefore := h.Indices[fromIndx]
 
