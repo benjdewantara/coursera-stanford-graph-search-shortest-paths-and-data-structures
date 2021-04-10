@@ -64,3 +64,15 @@ func PopulateHeapsFromFile(
 		}
 	}
 }
+
+func pickMedian(
+	minHeap *Heap.Heap,
+	maxHeap *Heap.Heap) int {
+	if len(minHeap.Values) >= len(maxHeap.Values)+1 {
+		return minHeap.Values[0]
+	} else if len(maxHeap.Values) >= len(minHeap.Values)+1 {
+		return maxHeap.Values[0]
+	} else {
+		return (minHeap.Values[0] + maxHeap.Values[0]) / 2
+	}
+}
