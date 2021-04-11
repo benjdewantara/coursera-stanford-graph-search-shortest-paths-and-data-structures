@@ -73,6 +73,6 @@ func pickMedian(
 	} else if len(maxHeap.Values) >= len(minHeap.Values)+1 {
 		return maxHeap.Values[0]
 	} else {
-		return (minHeap.Values[0] + maxHeap.Values[0]) / 2
+		return maxHeap.Values[0]
 	}
 }
