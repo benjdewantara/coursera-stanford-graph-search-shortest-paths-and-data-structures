@@ -21,29 +21,39 @@ func main() {
 		Values:    make([]int, 0),
 	}
 
-	PopulateHeapsFromFile(
+	sumMedians := PopulateHeapsSumMedians(
 		"_6ec67df2804ff4b58ab21c12edcb21f8_Median.txt",
 		&minHeap,
 		&maxHeap)
 
+	fmt.Println(fmt.Sprintf("sumMedians = %d", sumMedians))
 	fmt.Println("Hell on earth")
 }
 
-func PopulateHeapsFromFile(
+func PopulateHeapsSumMedians(
 	filepath string,
 	minHeap *Heap.Heap,
-	maxHeap *Heap.Heap) {
+	maxHeap *Heap.Heap) int {
+
+	sumMedians := 0
 
 	contentBytes, _ := ioutil.ReadFile(filepath)
-	for intIndx, intStr := range strings.Split(string(contentBytes), "\n") {
-		intStr = strings.TrimSuffix(intStr, "\r")
+	for intIndx, intStr := range strings.Split(string(contentBytes), "\r\n") {
+		if len(intStr) == 0 {
+			continue
+		}
+
 		num, _ := strconv.Atoi(intStr)
 
 		if len(minHeap.Values) == 0 {
 			minHeap.Insert(intIndx, num)
+			sumMedians += (pickMedian(minHeap, maxHeap))
+			sumMedians = sumMedians % 10000
 			continue
 		} else if len(maxHeap.Values) == 0 {
 			maxHeap.Insert(intIndx, num)
+			sumMedians += pickMedian(minHeap, maxHeap)
+			sumMedians = sumMedians % 10000
 			continue
 		}
 
@@ -62,7 +72,13 @@ func PopulateHeapsFromFile(
 			indx, value := maxHeap.ExtractRoot()
 			minHeap.Insert(indx, value)
 		}
+
+		median := pickMedian(minHeap, maxHeap)
+		sumMedians += median
+		sumMedians = sumMedians % 10000
 	}
+
+	return sumMedians
 }
 
 func pickMedian(
