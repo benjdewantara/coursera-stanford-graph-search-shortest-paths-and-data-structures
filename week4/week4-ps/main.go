@@ -62,3 +62,16 @@ func NumberMapFromFilepath(
 
 	return numbers
 }
+
+func NumberArrayFromFilepath(
+	filepath string) []int {
+	numbers := make([]int, 0, 1000000)
+
+	contentBytes, _ := ioutil.ReadFile(filepath)
+	for _, intStr := range strings.Split(string(contentBytes), "\n") {
+		num, _ := strconv.Atoi(intStr)
+		numbers = append(numbers, num)
+	}
+
+	return numbers
+}
