@@ -8,19 +8,21 @@ import (
 )
 
 func main() {
-	TargetValuesFromFilepath("./_6ec67df2804ff4b58ab21c12edcb21f8_algo1-programming_prob-2sum.txt")
+	targetValues := TargetValuesFromFilepath("./_6ec67df2804ff4b58ab21c12edcb21f8_algo1-programming_prob-2sum.txt")
+	if targetValues != nil {
+		fmt.Println("Populated")
+	}
 }
 
 func TargetValuesFromFilepath(
-	filepath string) int {
-
-	sumMedians := 0
+	filepath string) []int {
+	targetValues := make([]int, 0)
 
 	contentBytes, _ := ioutil.ReadFile(filepath)
 	for _, intStr := range strings.Split(string(contentBytes), "\n") {
 		num, _ := strconv.Atoi(intStr)
-		fmt.Println(num)
+		targetValues = append(targetValues, num)
 	}
 
-	return sumMedians
+	return targetValues
 }
