@@ -9,7 +9,6 @@ import (
 
 func main() {
     numbers := NumberMapFromFilepath("./_6ec67df2804ff4b58ab21c12edcb21f8_algo1-programming_prob-2sum.txt")
-    usedNumberExistenceCount := make(map[int]int)
 
     countOfTargetValuesFormedByDistinctXAndY := 0
 
@@ -32,39 +31,11 @@ func main() {
                 isEverythingDistinct = true
                 break
             }
-
-            _, xUsed := usedNumberExistenceCount[x]
-            _, yUsed := usedNumberExistenceCount[y]
-
-            //bothUnused := !xUsed && !yUsed
-
-            xLessThanUsed := !xUsed
-            yLessThanUsed := !yUsed
-
-            if xUsed {
-                xLessThanUsed = usedNumberExistenceCount[x] < numbers[x]
-            }
-
-            if yUsed {
-                yLessThanUsed = usedNumberExistenceCount[y] < numbers[y]
-            }
-
-            bothXYLessThanUsed := xLessThanUsed && yLessThanUsed
-
-            if bothXYLessThanUsed {
-                isEverythingDistinct = true
-                usedNumberExistenceCount[x] += 1
-                usedNumberExistenceCount[y] += 1
-            } else {
-                isEverythingDistinct = false
-                break
-            }
         }
 
         if isEverythingDistinct {
             countOfTargetValuesFormedByDistinctXAndY++
         }
-        usedNumberExistenceCount = make(map[int]int)
     }
 
     fmt.Println(
@@ -81,7 +52,6 @@ func NumberMapFromFilepath(
         num, _ := strconv.Atoi(intStr)
         numbers[num] += 1
     }
-    //
 
     return numbers
 }
