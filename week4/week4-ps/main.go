@@ -28,6 +28,9 @@ func main() {
 
             if !bothExist || !bothDifferent {
                 continue
+            } else {
+                isEverythingDistinct = true
+                break
             }
 
             _, xUsed := usedNumberExistenceCount[x]
